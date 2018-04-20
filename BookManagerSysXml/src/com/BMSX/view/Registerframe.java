@@ -7,6 +7,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.BMSX.control.Userhandler;
+import com.BMSX.modelbean.User;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -88,16 +91,21 @@ public class Registerframe extends JFrame {
 		JButton button = new JButton("注册");
 		button.setFont(new Font("黑体", Font.PLAIN, 18));
 		button.setBounds(82, 190, 93, 23);
-		/*button.addActionListener(new ActionListener() {
+		button.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String account=textField.getText();
+				String name=textField.getText();
 				String password=passwordField.getText();
-				String sql="insert into user values(?,?);";
-				JDBCTools.update(sql, account,password);
-				JOptionPane.showMessageDialog(Registerframe.this, "注册成功，去登陆！", "温馨提示", JOptionPane.INFORMATION_MESSAGE);
+				Userhandler un=new Userhandler();
+				User o=new User(name, password);
+				Boolean result=un.userRegister(o);
+				if(result) {
+					JOptionPane.showMessageDialog(Registerframe.this, "注册成功，去登陆！", "温馨提示", JOptionPane.INFORMATION_MESSAGE);
+				}else {
+					JOptionPane.showMessageDialog(Registerframe.this, "注册失败！", "温馨提示", JOptionPane.INFORMATION_MESSAGE);
+				}
 			}
-		});*/
+		});
 		contentPane.add(button);
 		
 		JButton button_1 = new JButton("登录");

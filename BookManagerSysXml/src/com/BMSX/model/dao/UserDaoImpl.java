@@ -43,8 +43,9 @@ public class UserDaoImpl extends BaseDaoImpl implements UserDao {
                 }
  catch(Exception e){
       System.out.println(e);
+      return false;
    }
-		return null;
+		return true;
 	}
 
 	@Override

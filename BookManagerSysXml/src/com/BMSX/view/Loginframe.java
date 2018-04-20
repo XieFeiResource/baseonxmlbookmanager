@@ -1,22 +1,25 @@
 package com.BMSX.view;
 
+import java.awt.Color;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.Color;
+
 import javax.swing.ImageIcon;
-import javax.swing.JTextField;
-import javax.swing.JPasswordField;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+
+import com.BMSX.control.Userhandler;
+import com.BMSX.model.dao.BaseDaoImpl;
+import com.BMSX.model.dao.UserDao;
+import com.BMSX.model.dao.UserDaoImpl;
 
 public class Loginframe extends JFrame {
 
@@ -63,7 +66,7 @@ public class Loginframe extends JFrame {
 		label_1.setBounds(61, 88, 96, 30);
 		contentPane.add(label_1);
 		
-		textField = new JTextField();
+		textField = new JTextField("谢飞");
 		textField.setBounds(167, 95, 188, 21);
 		contentPane.add(textField);
 		textField.setColumns(10);
@@ -74,31 +77,31 @@ public class Loginframe extends JFrame {
 		label_2.setBounds(61, 152, 81, 21);
 		contentPane.add(label_2);
 		
-		passwordField = new JPasswordField();
+		passwordField = new JPasswordField("123");
 		passwordField.setBounds(167, 154, 188, 21);
 		contentPane.add(passwordField);
 		
 		JButton btnNewButton = new JButton("登录");
 		btnNewButton.setFont(new Font("黑体", Font.PLAIN, 20));
 		btnNewButton.setBounds(103, 207, 93, 23);
-		/*btnNewButton.addActionListener(new ActionListener() {
+		btnNewButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String account=textField.getText();
+				Userhandler uh=new Userhandler();
+				/*UserDao ud=new UserDaoImpl();
+				((BaseDaoImpl) ud).initbookxml();*/
+				String name=textField.getText();
 				String password=passwordField.getText();
-				System.out.println(account+":  "+password);
-				String sql="select account,password from user where account=? and password=?;";
-				User loginuser=JDBCTools.get(User.class, sql, account,password);
-				System.out.println(loginuser);
-				if(loginuser!=null) {
-					//Mainframe m=new Mainframe();
+				System.out.println(name+":  "+password);
+				if(uh.userlogin(name)) {
+					Mainframe m=new Mainframe();
 					Loginframe.this.dispose();
 					m.setVisible(true);
 				}else {
 					JOptionPane.showMessageDialog(Loginframe.this, "密码与账号不匹配！", "温馨提示", JOptionPane.ERROR_MESSAGE);
 				}
 			}
-		});*/
+		});
 		contentPane.add(btnNewButton);
 		
 		JButton button = new JButton("注册");

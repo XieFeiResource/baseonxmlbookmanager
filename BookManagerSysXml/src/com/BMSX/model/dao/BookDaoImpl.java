@@ -1,96 +1,246 @@
 package com.BMSX.model.dao;
 
-import javax.xml.transform.*;
-import javax.xml.transform.stream.*;
-import javax.xml.transform.dom.*;
-import org.w3c.dom.*;
-import javax.xml.parsers.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-public class BookDaoImpl implements BookDao {
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.BMSX.modelbean.Book;
+
+public class BookDaoImpl extends BaseDaoImpl implements BookDao {
 
 	@Override
-	public Boolean add(Object o) {
-		try{
-            String train[]={"XML实践教程","JSP从入门到精通","Java实践教程"};
-            String type[]={"978-7-302-15488-4","7-302-12591-0","978-7-302-14337-6"};
-            String startTime[]={"王峰","刘海松","李章帅"};
-            //创建XML文档中需要的数据
-            DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder=factory.newDocumentBuilder();
-            Document document=builder.newDocument();  //创建document节点对象
-  
-            document.setXmlVersion("1.0");//设置使用XML文件的版本
-            Element root=document.createElement("图书列表");
-            document.appendChild(root);//设置XML文件的根结点
+	public Boolean add(Object o) {//添加图书
+		Book u=(Book) o;
+		try{ DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder=factory.newDocumentBuilder();
+        Document document=builder.parse(new File("图书列表.xml"));
+        Element root=document.getDocumentElement();
+        root.appendChild(document.createElement("图书"));//为根节点添加价格标记。
 
-            for(int k=1;k<=train.length;k++){
-               root.appendChild(document.createElement("图书"));
-            }  //在根节点下添加了三个节点
-
-            NodeList nodeList=document.getElementsByTagName("图书");//获得图书的节点集合
-            int size=nodeList.getLength();
-            for(int k=0;k<size;k++){
-               Node node=nodeList.item(k);
-               if(node.getNodeType()==Node.ELEMENT_NODE)
-                   {
-                     Element elementNode=(Element)node;
-                     elementNode.setAttribute("ISBN",type[k]);//为图书设置属性其取值从数组type中取。
-                     elementNode.appendChild(document.createElement("名称"));//为图书添加一个名字标记
-                     elementNode.appendChild(document.createElement("作者"));//为图书添加一个开车时间标记
-                   }
-                 }  
-
-              nodeList=document.getElementsByTagName("名称");//获得名字的节点集合
-              size=nodeList.getLength();
-              for(int k=0;k<size;k++){
-                 Node node=nodeList.item(k);
-                 if(node.getNodeType()==Node.ELEMENT_NODE){
-                    Element elementNode=(Element)node;
-                    elementNode.appendChild(document.createTextNode(train[k])); //为标记添加文本数据。
-                 }
-             }   
-
-          nodeList=document.getElementsByTagName("作者");
-          size=nodeList.getLength();
-          for(int k=0;k<size;k++){
-              Node node=nodeList.item(k);
-              if(node.getNodeType()==Node.ELEMENT_NODE){
-                 Element elementNode=(Element)node;
-                 elementNode.appendChild(document.createTextNode(startTime[k]));  
-               }
-           }
-
-      TransformerFactory transFactory=TransformerFactory.newInstance();//创建一个TransformerFactory（转换工厂对象）
-       Transformer transformer=transFactory.newTransformer();//创建一个Transformer对像（文件转换对象）
-       DOMSource domSource=new DOMSource(document); //把要转换的Document对象封装到一个DOMSource类中
-       File file=new File("图书列表.xml");
-       FileOutputStream out=new FileOutputStream(file);
-       StreamResult xmlResult=new StreamResult(out);//将要变换得到XML文件将来保存在StreamResult
-       transformer.transform(domSource,xmlResult);//把节点树转换为XML文件
-         }
-   catch(Exception e){
-        System.out.println(e);
-     }
-		return null;
+       NodeList nodeList=document.getElementsByTagName("图书");//获得用户节点集合
+       int  size=nodeList.getLength();
+                Node node=nodeList.item(size-1);
+                if(node.getNodeType()==Node.ELEMENT_NODE){
+                   Element elementNode=(Element)node;
+                   elementNode.setAttribute("id",u.getBno());
+                   Element name=document.createElement("名称");
+                   name.appendChild(document.createTextNode(u.getBname()));
+                   Element price=document.createElement("价格");
+                   price.appendChild(document.createTextNode(u.getBprice()));
+                   Element account=document.createElement("库存");
+                   account.appendChild(document.createTextNode(u.getBaccount()));
+                   Element imagepath=document.createElement("图片路径");
+                   imagepath.appendChild(document.createTextNode(u.getBimagepath()));
+                   Element author=document.createElement("作者");
+                   author.appendChild(document.createTextNode(u.getBauthor()));
+                   Element des=document.createElement("描述");
+                   des.appendChild(document.createTextNode(u.getBdes()));
+                   elementNode.appendChild(name); 
+                   elementNode.appendChild(price); 
+                   elementNode.appendChild(account); 
+                   elementNode.appendChild(imagepath); 
+                   elementNode.appendChild(author); 
+                   elementNode.appendChild(des); 
+            }  
+      TransformerFactory transFactory=TransformerFactory.newInstance();
+      Transformer transformer=transFactory.newTransformer();
+      DOMSource domSource=new DOMSource(document); 
+      File file=new File("图书列表.xml");
+      FileOutputStream out=new FileOutputStream(file);
+      StreamResult xmlResult=new StreamResult(out);
+      transformer.transform(domSource,xmlResult);
+                }
+ catch(Exception e){
+      System.out.println(e);
+      return false;
+   }
+		return true;
 	}
 
 	@Override
-	public Boolean delete(Object o) {
-		// TODO Auto-generated method stub
-		return null;
+	public Boolean delete(Object o) {//删除一本图书
+		Book u=(Book) o;
+		try{ 
+		DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder=factory.newDocumentBuilder();
+        Document document=builder.parse(new File("图书列表.xml"));
+        Element root=document.getDocumentElement();
+
+        NodeList nodeList=document.getElementsByTagName("图书");//获得出厂日期节点集合
+      int size=nodeList.getLength();
+      for(int k=0;k<size;k++){
+                Node node=nodeList.item(k);
+                if(node.getNodeType()==Node.ELEMENT_NODE){
+                	Element elementNode=(Element)node;
+                    String str=elementNode.getFirstChild().getTextContent();
+                    if(str.equals(u.getBname())){
+                    	System.out.println(str);
+                    	root.removeChild(node);
+                      }
+                }
+            }
+
+      TransformerFactory transFactory=TransformerFactory.newInstance();
+      Transformer transformer=transFactory.newTransformer();
+      DOMSource domSource=new DOMSource(document); 
+      File file=new File("图书列表.xml");
+      FileOutputStream out=new FileOutputStream(file);
+      StreamResult xmlResult=new StreamResult(out);
+      transformer.transform(domSource,xmlResult);
+                }
+ catch(Exception e){
+      System.out.println(e);
+   }
+		return true;
 	}
 
 	@Override
 	public Boolean update(Object o) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Book u=(Book) o;
+		List<Book> books=(List<Book>) searchone(u.getBname());
+		 try{
+			 DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+	            DocumentBuilder builder=factory.newDocumentBuilder();
+	            Document document=builder.parse(new File("图书列表.xml"));
+	            Element root=document.getDocumentElement();
 
+	            NodeList nodeList=root.getElementsByTagName("图书");//获得书名的节点集合
+	            int size=nodeList.getLength();
+             for(int k=0;k<size;k++){
+            	 Node node=nodeList.item(k);
+            	 Element elementNode=(Element)node;
+            	 if(elementNode.getFirstChild().getTextContent().equals(books.get(0).getBname())) {
+            		 NodeList nodes=node.getChildNodes();
+                    	nodes.item(0).setTextContent(u.getBname());;
+                    	nodes.item(1).setTextContent(u.getBprice());
+                    	nodes.item(2).setTextContent(u.getBaccount());
+                    	nodes.item(3).setTextContent(u.getBimagepath());
+                    	nodes.item(4).setTextContent(u.getBauthor());
+                    	nodes.item(5).setTextContent(u.getBdes());
+            	 }
+                 }   
+
+           TransformerFactory transFactory=TransformerFactory.newInstance();
+           Transformer transformer=transFactory.newTransformer();
+           DOMSource domSource=new DOMSource(document); 
+           File file=new File("图书列表.xml");
+           FileOutputStream out=new FileOutputStream(file);
+           StreamResult xmlResult=new StreamResult(out);
+           transformer.transform(domSource,xmlResult);
+                     }
+      catch(Exception e){
+           System.out.println(e);
+           return false;
+        }
+		 return true;
+	}
+	
+	public Object searchone(String name) {
+		Book u=new Book();
+		List<Book> list = new ArrayList<Book>();
+		 try{
+            DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder=factory.newDocumentBuilder();
+            Document document=builder.parse(new File("图书列表.xml"));
+            Element root=document.getDocumentElement();
+
+            NodeList nodeList=root.getElementsByTagName("图书");//获得书名的节点集合
+            int size=nodeList.getLength();
+            for(int k=0;k<size;k++){
+                    Node node=nodeList.item(k);
+                    NodeList nodes=node.getChildNodes();
+                    	String bname=nodes.item(0).getTextContent();
+                    	String bprice=nodes.item(1).getTextContent();
+                    	String baccount=nodes.item(2).getTextContent();
+                    	String bimagepath=nodes.item(3).getTextContent();
+                    	String bauthor=nodes.item(4).getTextContent();
+                    	String bdes=nodes.item(5).getTextContent();
+                    if(bname.equals(name)){
+                    	u.setBname(bname);
+                    	u.setBprice(bprice);
+                    	u.setBaccount(baccount);
+                    	u.setBimagepath(bimagepath);
+                    	u.setBauthor(bauthor);
+                    	u.setBdes(bdes);
+                    	list.add(u);
+                       }
+                    }
+
+          TransformerFactory transFactory=TransformerFactory.newInstance();
+          Transformer transformer=transFactory.newTransformer();
+          DOMSource domSource=new DOMSource(document); 
+          File file=new File("图书列表.xml");
+          FileOutputStream out=new FileOutputStream(file);
+          StreamResult xmlResult=new StreamResult(out);
+          transformer.transform(domSource,xmlResult);
+                    }
+     catch(Exception e){
+          System.out.println(e);
+       }
+		return list;
+	}
+	
 	@Override
-	public Object list() {
-		// TODO Auto-generated method stub
-		return null;
+	public Object list() {//列出所有商品
+		List<Book> list = new ArrayList<Book>();
+		 try{
+           DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
+           DocumentBuilder builder=factory.newDocumentBuilder();
+           Document document=builder.parse(new File("图书列表.xml"));
+           Element root=document.getDocumentElement();
+
+           NodeList nodeList=root.getElementsByTagName("图书");//获得书名的节点集合
+           int size=nodeList.getLength();
+           for(int k=0;k<size;k++){
+                   Node node=nodeList.item(k);
+                   NodeList nodes=node.getChildNodes();
+                   	String bname=nodes.item(0).getTextContent();
+                   	String bprice=nodes.item(1).getTextContent();
+                   	String baccount=nodes.item(2).getTextContent();
+                   	String bimagepath=nodes.item(3).getTextContent();
+                   	String bauthor=nodes.item(4).getTextContent();
+                   	String bdes=nodes.item(5).getTextContent();
+                   	Book u=new Book();
+                   	u.setBname(bname);
+                   	u.setBprice(bprice);
+                   	u.setBaccount(baccount);
+                   	u.setBimagepath(bimagepath);
+                   	u.setBauthor(bauthor);
+                   	u.setBdes(bdes);
+                   	list.add(u);
+           }
+		 }
+           catch(Exception e){
+               System.out.println(e);
+            }
+		return list;
 	}
 
+	// 为table中的二维数组赋值
+		public Object[][] Createdata(List<Book> list) {
+			Object[][] data = new Object[list.size()][6];
+			for (int i = 0; i < list.size(); i++) {
+				data[i][0] = list.get(i).getBname();
+				data[i][1] = list.get(i).getBauthor();
+				data[i][2] = list.get(i).getBprice();
+				data[i][3] = list.get(i).getBaccount();
+				data[i][4] = list.get(i).getBimagepath();
+				data[i][5] = list.get(i).getBdes();
+			}
+			return data;
+		}
+		
 }

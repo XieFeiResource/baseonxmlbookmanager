@@ -10,11 +10,21 @@ public class Userhandler {
 	public Userhandler() {
 		b=new UserDaoImpl();
 	}
-	public static void main(String[] args) {
-		Userhandler u=new Userhandler();
-		User o=new User();
-		o.setname("谢飞");
-		o.setPassword("123456");
-		u.b.update(o);
+	
+	public Boolean userlogin(String name) {
+		User loginuser=b.searchone(name);
+		System.out.println(loginuser);
+		if(loginuser.getname()!=null) {
+			return true;
+		}
+		return false;
+	}
+	
+	public Boolean userRegister(User o) {
+		Boolean flag=b.add(o);
+		if(flag) {
+			return true;
+		}
+		return false;
 	}
 }
