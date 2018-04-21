@@ -28,10 +28,10 @@ import com.BMSX.modelbean.Book;
 public class Addgoodframe extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField_2;// 商品名称
-	private JTextField textField_3;// 商品价格
-	private JTextField textField_4;// 商品库存
-	private JTextField textField_5;// 商品类型
+	private JTextField textField_2;// 图书名称
+	private JTextField textField_3;// 图书价格
+	private JTextField textField_4;// 图书库存
+	private JTextField textField_5;// 图书类型
 	private JTextArea textArea;
 	private BookDao bookdao;
 	private JLabel lblNewLabel;// 图片
@@ -180,7 +180,7 @@ public class Addgoodframe extends JFrame {
 		});
 		contentPane.add(button_1);
 */
-		JLabel label = new JLabel("商品添加");
+		JLabel label = new JLabel("图书添加");
 		label.setForeground(Color.GREEN);
 		label.setFont(new Font("黑体", Font.PLAIN, 18));
 		label.setBounds(161, 10, 100, 23);

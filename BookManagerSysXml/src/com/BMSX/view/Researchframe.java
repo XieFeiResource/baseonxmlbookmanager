@@ -28,14 +28,14 @@ public class Researchframe extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
-	private JTextField textField_1;//商品编号
-	private JTextField textField_2;//商品名称
-	private JTextField textField_3;//商品价格
-	private JTextField textField_4;//商品库存
-	private JTextField textField_5;//商品类型
+	private JTextField textField_1;//图书编号
+	private JTextField textField_2;//图书名称
+	private JTextField textField_3;//图书价格
+	private JTextField textField_4;//图书库存
+	private JTextField textField_5;//图书类型
 	private BookDao bookdao;
 	private JLabel lblNewLabel;//图片
-	private JTextArea textArea;//商品描述
+	private JTextArea textArea;//图书描述
 	private Object[][] data;//商品描述
 	public JTextField getTextField() {
 		return textField;
@@ -101,7 +101,7 @@ public class Researchframe extends JFrame {
 		});
 		contentPane.add(button);
 		
-		JLabel label_1 = new JLabel("商品图片");
+		JLabel label_1 = new JLabel("图书图片");
 		label_1.setFont(new Font("黑体", Font.PLAIN, 12));
 		label_1.setBounds(20, 76, 54, 15);
 		contentPane.add(label_1);
@@ -121,7 +121,7 @@ public class Researchframe extends JFrame {
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);*/
 		
-		JLabel lblNewLabel_1 = new JLabel("商品名称");
+		JLabel lblNewLabel_1 = new JLabel("图书名称");
 		lblNewLabel_1.setFont(new Font("黑体", Font.PLAIN, 12));
 		lblNewLabel_1.setBounds(116, 103, 48, 15);
 		contentPane.add(lblNewLabel_1);
@@ -131,7 +131,7 @@ public class Researchframe extends JFrame {
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 		
-		JLabel label_3 = new JLabel("商品价格");
+		JLabel label_3 = new JLabel("图书价格");
 		label_3.setFont(new Font("黑体", Font.PLAIN, 12));
 		label_3.setBounds(116, 135, 54, 15);
 		contentPane.add(label_3);
@@ -141,7 +141,7 @@ public class Researchframe extends JFrame {
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 		
-		JLabel label_4 = new JLabel("商品库存");
+		JLabel label_4 = new JLabel("图书库存");
 		label_4.setFont(new Font("黑体", Font.PLAIN, 12));
 		label_4.setBounds(116, 166, 54, 15);
 		contentPane.add(label_4);
@@ -151,7 +151,7 @@ public class Researchframe extends JFrame {
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 		
-		JLabel label_5 = new JLabel("商品类型");
+		JLabel label_5 = new JLabel("图书类型");
 		label_5.setFont(new Font("黑体", Font.PLAIN, 12));
 		label_5.setBounds(116, 202, 54, 15);
 		contentPane.add(label_5);
@@ -161,7 +161,7 @@ public class Researchframe extends JFrame {
 		contentPane.add(textField_5);
 		textField_5.setColumns(10);
 		
-		JLabel label_6 = new JLabel("商品描述");
+		JLabel label_6 = new JLabel("图书描述");
 		label_6.setFont(new Font("黑体", Font.PLAIN, 12));
 		label_6.setBounds(304, 79, 54, 15);
 		contentPane.add(label_6);
