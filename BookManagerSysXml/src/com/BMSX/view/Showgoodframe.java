@@ -7,9 +7,19 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import com.BMSX.control.Bookhandler;
+import com.BMSX.control.DBToXmlService;
+
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import java.awt.Font;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JMenu;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Showgoodframe extends JFrame {
 
@@ -67,5 +77,44 @@ public class Showgoodframe extends JFrame {
 		table.getColumnModel().getColumn(5).setPreferredWidth(102);
 		table.getColumnModel().getColumn(5).setPreferredWidth(155);
 		scrollPane.setViewportView(table);
+		
+		String[] items = new String[]{"导入xml到数据库", "导出数据到xml"};
+		JMenuBar menubar = new JMenuBar();
+        JMenu jmManager = new JMenu("导入/导出");
+        JMenuItem item1 = new JMenuItem(items[0]);
+        jmManager.add(item1);
+        item1.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Bookhandler bh=new Bookhandler();
+				try {
+					bh.importDataIntoDB();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(Showgoodframe.this, "导入成功！", "温馨提示", JOptionPane.INFORMATION_MESSAGE);
+
+			}
+		});
+        JMenuItem item2 = new JMenuItem(items[1]);
+        jmManager.add(item2);
+        item2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DBToXmlService dbtoxml=new DBToXmlService();
+				try {
+					dbtoxml.exportDataToXMlFile("bookmanage", "book");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				JOptionPane.showMessageDialog(Showgoodframe.this, "导出成功！", "温馨提示", JOptionPane.INFORMATION_MESSAGE);
+
+			}
+		});
+        menubar.add(jmManager);
+        menubar.setBounds(0, 0, 111, 22);
+        this.setJMenuBar(menubar);
 	}
 }

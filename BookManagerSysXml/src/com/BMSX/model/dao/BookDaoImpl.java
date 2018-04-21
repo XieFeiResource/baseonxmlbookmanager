@@ -73,24 +73,29 @@ public class BookDaoImpl extends BaseDaoImpl implements BookDao {
 	@Override
 	public Boolean delete(Object o) {//删除一本图书
 		Book u=(Book) o;
-		try{ 
+		try{
 		DocumentBuilderFactory factory=DocumentBuilderFactory.newInstance();
         DocumentBuilder builder=factory.newDocumentBuilder();
         Document document=builder.parse(new File("图书列表.xml"));
         Element root=document.getDocumentElement();
 
-        NodeList nodeList=document.getElementsByTagName("图书");//获得出厂日期节点集合
+        NodeList nodeList=document.getElementsByTagName("图书");//获得图书节点集合
       int size=nodeList.getLength();
+      String str=null;
       for(int k=0;k<size;k++){
                 Node node=nodeList.item(k);
-                if(node.getNodeType()==Node.ELEMENT_NODE){
-                	Element elementNode=(Element)node;
-                    String str=elementNode.getFirstChild().getTextContent();
-                    if(str.equals(u.getBname())){
+                NodeList childNodes = node.getChildNodes();//获得每一个图书节点包含的所有子节点  
+                // 遍历childNodes获取每个节点名和节点值  
+                for (int j = 0; j < childNodes.getLength(); j++) {  
+                    // 区分text类型的node以及element类型的node  
+                    if (childNodes.item(j).getNodeType() == Node.ELEMENT_NODE) {  
+                            str=childNodes.item(j).getFirstChild().getNodeValue();
+                    } 
+                    if(str.equals(u.getBname())) {
                     	System.out.println(str);
                     	root.removeChild(node);
-                      }
-                }
+                    }
+                }  
             }
 
       TransformerFactory transFactory=TransformerFactory.newInstance();
@@ -208,6 +213,7 @@ public class BookDaoImpl extends BaseDaoImpl implements BookDao {
                    Node node=nodeList.item(k);
                    NodeList nodes=node.getChildNodes();
                    	String bname=nodes.item(0).getTextContent();
+                   	System.out.println(bname);
                    	String bprice=nodes.item(1).getTextContent();
                    	String baccount=nodes.item(2).getTextContent();
                    	String bimagepath=nodes.item(3).getTextContent();

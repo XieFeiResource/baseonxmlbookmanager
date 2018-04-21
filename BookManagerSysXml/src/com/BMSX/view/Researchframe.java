@@ -187,7 +187,6 @@ public class Researchframe extends JFrame {
 				int isDelete=JOptionPane.showConfirmDialog(Researchframe.this, "确定删除？", "温馨提示", JOptionPane.INFORMATION_MESSAGE);
 				if(isDelete == JOptionPane.YES_OPTION){
 					String name=textField_2.getText();
-					System.out.println(name);
 					Book b=new Book();
 					b.setBname(name);
 				bookdao.delete(b);

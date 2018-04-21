@@ -28,8 +28,9 @@ public abstract class BaseDaoImpl implements BaseDao {
 	//连接数据库
 	public Connection getConn() {
 		try {
+			Class.forName(driverClassName);
 			conn=DriverManager.getConnection(url, username, password);
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
