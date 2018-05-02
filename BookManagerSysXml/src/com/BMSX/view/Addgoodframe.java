@@ -24,6 +24,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.BMSX.model.dao.BookDao;
 import com.BMSX.modelbean.Book;
+import com.BMSX.test.Test;
 
 public class Addgoodframe extends JFrame {
 
@@ -155,10 +156,13 @@ public class Addgoodframe extends JFrame {
 				String baccount=textField_4.getText();
 				String bauthor=textField_5.getText();
 				String bdes=textArea.getText();
-				/*int price=Integer.parseInt(gprice);
-				int account=Integer.parseInt(gaccount);*/
+				int bprice1=Integer.parseInt(bprice);
+				int baccount1=Integer.parseInt(baccount);
 				//int no=Integer.parseInt(gno);
+				Test t=new Test();
 				Book b=new Book(null, bname, bprice, baccount, fileName, bauthor, bdes);
+				com.bm.model.bean.Book book=new com.bm.model.bean.Book(baccount1, bauthor, bdes, "images/1.jpg", bname, bprice1);
+				t.tongbumeg(book);
 				bookdao.add(b);
 				JOptionPane.showMessageDialog(Addgoodframe.this, "添加成功！", "温馨提示", JOptionPane.INFORMATION_MESSAGE);
 			}
